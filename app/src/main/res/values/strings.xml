@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Inventory App</string>
+    <string name="button_caption">Insert dummy product</string>
+    <string name="table_header">Number of rows in store database table:</string>
+</resources>

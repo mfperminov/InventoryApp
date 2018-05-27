@@ -1,43 +1,34 @@
 package com.example.mperminov.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.mperminov.inventoryapp.data.StoreDbHelper;
 import com.example.mperminov.inventoryapp.data.StoreContract.StoreEntry;
+import com.example.mperminov.inventoryapp.data.StoreDbHelper;
 import com.github.javafaker.Faker;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private StoreDbHelper mDbHelper;
+    StoreCursorAdapter storeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDbHelper = new StoreDbHelper(this);
-        displayDatabaseInfo();
-        Button insertDummyButton = findViewById(R.id.dummy_insert_button);
-        insertDummyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertProduct();
-                displayDatabaseInfo();
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
+        getLoaderManager().initLoader(0, null, this);
+        ListView itemsListView = findViewById(R.id.list_view);
+        storeAdapter = new StoreCursorAdapter(this, null);
+        itemsListView.setAdapter(storeAdapter);
+        insertProduct();
     }
 
     private void insertProduct() {
@@ -75,7 +66,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void displayDatabaseInfo() {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                StoreEntry._ID,
+                StoreEntry.COLUMN_PRODUCT_NAME,
+                StoreEntry.COLUMN_QUANTITY,
+                StoreEntry.COLUMN_PRICE
+        };
+        return new CursorLoader(this, StoreEntry.CONTENT_URI, projection, null,
+                null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        storeAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        storeAdapter.swapCursor(null);
+    }
+
+   /* private void displayDatabaseInfo() {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String[] projection = {
@@ -140,5 +153,5 @@ public class MainActivity extends AppCompatActivity {
             // resources and makes it invalid.
             cursor.close();
         }
-    }
+    }*/
 }

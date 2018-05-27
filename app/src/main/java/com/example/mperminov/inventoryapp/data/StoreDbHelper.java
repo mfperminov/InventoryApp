@@ -22,7 +22,8 @@ public class StoreDbHelper extends SQLiteOpenHelper {
                     StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT," +
                     StoreEntry.COLUMN_DISCOUNTED + " INTEGER NOT NULL DEFAULT 0)";
 
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + StoreEntry.TABLE_NAME;
+    private static final String SQL_ALTER_DATABASE = "ALTER TABLE " + StoreEntry.TABLE_NAME
+            + " ADD COLUMN " + StoreEntry.COLUMN_SIZES + " TEXT";
 
     public StoreDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,7 +37,13 @@ public class StoreDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
+        /*
+        What should we do here? Definitely not to delete user data.
+        Let's imagine then user upgraded to second (or third and further) version of app
+        then we should add one more column with available sizes.
+         */
+        if (oldVersion < 2) {
+            db.execSQL(SQL_ALTER_DATABASE);
+        }
     }
 }

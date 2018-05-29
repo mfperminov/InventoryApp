@@ -20,4 +20,27 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="item_text_big" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">#356859</item>
+        <item name="android:fontFamily">@font/lekton_bold</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="price_text" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">#29302E</item>
+        <item name="android:fontFamily">@font/lekton</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="supplier_text_captions" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">#29302E</item>
+        <item name="android:fontFamily">@font/lekton_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="supplier_text" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">#29302E</item>
+        <item name="android:fontFamily">@font/lekton</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

@@ -63,7 +63,9 @@ public class StoreCursorAdapter extends CursorAdapter {
         int price = cursor.getInt(cursor.getColumnIndexOrThrow(StoreEntry.COLUMN_PRICE));
         //Bind data to views.
         nameTextView.setText(name);
-        quantityTextView.setText(String.valueOf(quantity));
-        priceTextView.setText(String.valueOf(price));
+        String formattedQuantityString = context.getString(R.string.quantity_available, quantity);
+        quantityTextView.setText(formattedQuantityString);
+        String formattedPriceString = context.getString(R.string.price_with_dollar, price);
+        priceTextView.setText(formattedPriceString);
     }
 }

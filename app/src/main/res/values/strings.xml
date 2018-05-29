@@ -4,4 +4,10 @@
     <string name="table_header">Number of rows in store database table:</string>
     <string name="action_insert_random">Insert random product</string>
     <string name="action_delete_all_entries">Delete all products</string>
+    <string name="quantity_available">%1$d available</string>
+    <string name="price_with_dollar">$%1$d</string>
+    <string name="content_button_plus">Add one to current number of this item</string>
+    <string name="content_button_minus">Extract one from current quantity of this item.</string>
+    <string name="call_button_caption">call</string>
+    <string name="delete_button_caption">delete entry</string>
 </resources>

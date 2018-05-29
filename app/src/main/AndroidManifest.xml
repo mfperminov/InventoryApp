@@ -12,13 +12,21 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ItemActivity"
+            android:parentActivityName=".MainActivity">
+            <!-- Parent activity meta-com.example.android.pets.data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
         <provider
-            android:authorities="com.example.mperminov.inventoryapp"
             android:name=".data.StoreProvider"
+            android:authorities="com.example.mperminov.inventoryapp"
             android:exported="false" />
     </application>
 

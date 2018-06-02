@@ -33,15 +33,7 @@ public class StoreContract {
         public static final String COLUMN_QUANTITY = "quantity";
         public static final String COLUMN_SUPPLIER_NAME = "supplier_name";
         public static final String COLUMN_SUPPLIER_PHONE_NUMBER = "supplier_phone_number";
-        public static final String COLUMN_DISCOUNTED = "has_discount";
         //one more column for "upgrade"
         public static final String COLUMN_SIZES = "sizes";
-
-        /**
-         * If value 1 then discount from the supplier for this product
-         * is exist, if 0 (default) there is no discount.
-         */
-        public static final int HAS_DISCOUNT = 1;
-        public static final int NO_DISCOUNT = 0;
     }
 }

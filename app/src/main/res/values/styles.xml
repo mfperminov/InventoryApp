@@ -43,4 +43,16 @@
         <item name="android:fontFamily">@font/lekton</item>
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="supplier_text_edit" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">#29302E</item>
+        <item name="android:fontFamily">@font/lekton</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="quantity_text_edit" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">#356859</item>
+        <item name="android:fontFamily">@font/lekton_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

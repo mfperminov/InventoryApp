@@ -37,4 +37,6 @@
     <string name="enter_price_error_less_zero">Price cannot be less or equal to 0</string>
     <string name="enter_quantity_error">Please enter quantity</string>
     <string name="name_error.edit_text">Please provide correct name</string>
+    <string name="update_success">Successfully updated</string>
+    <string name="update_failure">Problem with updating</string>
 </resources>

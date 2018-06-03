@@ -140,6 +140,8 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
                 dialog.show();
             }
         });
+        buttonMinus.setOnClickListener(new QuantityButtonListener(mUri, -1, quantityTextView.getId(), false));
+        buttonPlus.setOnClickListener(new QuantityButtonListener(mUri, 1, quantityTextView.getId(), false));
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.example.mperminov.inventoryapp;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -78,9 +80,42 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
+                deleteAll();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAll() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Ask question to user.
+        builder.setMessage(R.string.delete_dialog_message);
+        // Add the buttons
+        builder.setPositiveButton(R.string.delete_entry_accept,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked delete button. Delete current entry.
+                        int rowsDeleted = getContentResolver().delete(StoreEntry.CONTENT_URI, null,
+                                null);
+                        if (rowsDeleted > 0) {
+                            Toast.makeText(getBaseContext(), R.string.delete_successful,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), R.string.delete_not_ok,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        builder.setNegativeButton(R.string.cancel_delete_dialog,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog. Dismiss the dialog.
+                        dialog.dismiss();
+                    }
+                });
+        // Create and show dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void insertProduct() {

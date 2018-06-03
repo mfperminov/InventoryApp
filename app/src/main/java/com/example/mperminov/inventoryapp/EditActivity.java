@@ -98,7 +98,14 @@ public class EditActivity extends AppCompatActivity {
                         Toast.makeText(this, R.string.update_failure, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    getContentResolver().insert(StoreContract.StoreEntry.CONTENT_URI, values);
+                    Uri newRow =
+                            getContentResolver().insert(StoreContract.StoreEntry.CONTENT_URI, values);
+                    if (newRow != null) {
+                        Toast.makeText(this, R.string.insert_success, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(this, R.string.insert_failure, Toast.LENGTH_SHORT).show();
+                    }
                     finish();
                 }
             } else
@@ -161,7 +168,7 @@ public class EditActivity extends AppCompatActivity {
             quantityTextLayout.setError("");
         }
         //Supplier name - at least one letter in name
-        if (!supplierNameEditText.getText().toString().matches("\\w*[a-zA-Z]\\w*") &&
+        if (supplierNameEditText.getText().toString().matches("[0-9]+") &&
                 !TextUtils.isEmpty(supplierNameEditText.getText().toString())) {
             supplierTextLayout.setError(getString(R.string.name_error_edit_text));
             dataCorrect = false;

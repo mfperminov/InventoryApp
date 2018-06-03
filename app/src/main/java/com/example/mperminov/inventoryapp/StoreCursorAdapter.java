@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -67,5 +68,8 @@ public class StoreCursorAdapter extends CursorAdapter {
         quantityTextView.setText(formattedQuantityString);
         String formattedPriceString = context.getString(R.string.price_with_dollar, price);
         priceTextView.setText(formattedPriceString);
+        Button sellButton = view.findViewById(R.id.sell_button);
+        // Uri newUri = StoreEntry.CONTENT_URI.with
+        sellButton.setOnClickListener(new QuantityButtonListener(StoreEntry.CONTENT_URI, -1, R.id.quantity_text_view, true));
     }
 }

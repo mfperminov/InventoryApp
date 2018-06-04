@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void deleteAll() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Ask question to user.
-        builder.setMessage(R.string.delete_dialog_message);
+        builder.setMessage(R.string.delete_all_dialog_message);
         // Add the buttons
         builder.setPositiveButton(R.string.delete_entry_accept,
                 new DialogInterface.OnClickListener() {
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                             Toast.makeText(getBaseContext(), R.string.delete_successful,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getBaseContext(), R.string.delete_not_ok,
+                            Toast.makeText(getBaseContext(), R.string.delete_all_not_ok,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

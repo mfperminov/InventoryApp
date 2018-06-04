@@ -41,9 +41,12 @@ public class QuantityButtonListener implements View.OnClickListener {
                 values.put(StoreEntry.COLUMN_QUANTITY, quantity + mAction);
                 TextView quantityTextView = rootView.findViewById(mQuantityViewId);
                 if (mNeedFormattedString) {
-                    //String formattedQuantityString = v.getContext().getString(R.string.quantity_available, Integer.parseInt
-                    //(quantityTextView.getText().toString()) + mAction);
-                    quantityTextView.setText("Nihuya");
+                    String selection = StoreEntry._ID + "=?";
+                    String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mUri))};
+                    v.getContext().getContentResolver().update(mUri, values, selection, selectionArgs);
+                    //String formattedQuantityString = v.getContext().getString(R.string.quantity_available,
+                    //quantity+mAction);
+                    //quantityTextView.setText(formattedQuantityString);
                 } else {
                     String selection = StoreEntry._ID + "=?";
                     String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mUri))};
@@ -54,11 +57,5 @@ public class QuantityButtonListener implements View.OnClickListener {
         } else {
             Log.d("OnClick", "No data");
         }
-
-
-        /*String selection = StoreEntry._ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mUri))};
-
-        v.getContext().getContentResolver().update(mUri,)*/
     }
 }

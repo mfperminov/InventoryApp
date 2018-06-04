@@ -1,7 +1,9 @@
 package com.example.mperminov.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +71,10 @@ public class StoreCursorAdapter extends CursorAdapter {
         String formattedPriceString = context.getString(R.string.price_with_dollar, price);
         priceTextView.setText(formattedPriceString);
         Button sellButton = view.findViewById(R.id.sell_button);
-        // Uri newUri = StoreEntry.CONTENT_URI.with
-        sellButton.setOnClickListener(new QuantityButtonListener(StoreEntry.CONTENT_URI, -1, R.id.quantity_text_view, true));
+        // Get current row id;
+        long currentId = cursor.getLong(cursor.getColumnIndex(StoreEntry._ID));
+        Uri currentUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, currentId);
+        // Uri newUri = StoreEntry.CONTENT_URI.with id appended
+        sellButton.setOnClickListener(new QuantityButtonListener(currentUri, -1, R.id.quantity_text_view, true));
     }
 }

@@ -42,4 +42,6 @@
     <string name="insert_success">Successfully added!</string>
     <string name="insert_failure">Cannot add new entry. Maybe try again?</string>
     <string name="quantity_less_zero_error_toast">Сannot set a quantity less than zero</string>
+    <string name="delete_all_dialog_message">Do you want to delete ALL entries?</string>
+    <string name="delete_all_not_ok">There was error with deleting</string>
 </resources>

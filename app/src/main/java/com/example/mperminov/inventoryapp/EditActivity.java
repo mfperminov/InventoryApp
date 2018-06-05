@@ -1,15 +1,20 @@
 package com.example.mperminov.inventoryapp;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.mperminov.inventoryapp.data.StoreContract;
@@ -21,6 +26,7 @@ import butterknife.ButterKnife;
 
 public class EditActivity extends AppCompatActivity {
     private Uri mUri;
+    private boolean mDataHasChanged = false;
     @BindView(R.id.edit_product)
     TextInputEditText productEditText;
     @BindView(R.id.edit_price)
@@ -53,6 +59,12 @@ public class EditActivity extends AppCompatActivity {
         } else {
             setTitle(getString(R.string.edit_label_case_add));
         }
+        productEditText.setOnTouchListener(mTouchListener);
+        priceEditText.setOnTouchListener(mTouchListener);
+        quantityEditText.setOnTouchListener(mTouchListener);
+        supplierNameEditText.setOnTouchListener(mTouchListener);
+        supplierPhoneEditText.setOnTouchListener(mTouchListener);
+
     }
 
     private void inflateData(Uri mUri) {
@@ -111,6 +123,28 @@ public class EditActivity extends AppCompatActivity {
             } else
                 Toast.makeText(this, R.string.user_correct_toast, Toast.LENGTH_SHORT).show();
         }
+        if (item.getItemId() == R.id.homeAsUp) {
+            // If the pet hasn't changed, continue with navigating up to parent activity
+            // which is the {@link CatalogActivity}.
+            if (!mDataHasChanged) {
+                NavUtils.navigateUpFromSameTask(EditActivity.this);
+                return true;
+            }
+            // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+            // Create a click listener to handle the user confirming that
+            // changes should be discarded.
+            DialogInterface.OnClickListener discardButtonClickListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // User clicked "Discard" button, navigate to parent activity.
+                            NavUtils.navigateUpFromSameTask(EditActivity.this);
+                        }
+                    };
+            // Show a dialog that notifies the user they have unsaved changes
+            showUnsavedChangesDialog(discardButtonClickListener);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -138,9 +172,11 @@ public class EditActivity extends AppCompatActivity {
      * *Price - not empty. Also it should be > 0 but we can guarantee it with typeInput specified
      * in xml layout
      * *Quantity - same as for price. Positive and integer value guaranteed by xml layout parameter
-     * *Supplier name - I think often happens that some people start to write phone instead of name
-     * (like me). So if we found that input doesn't contain letters at all,
-     * we should tell user correct name.
+     * *Supplier name - can be epmty BUT I think often happens that some people start
+     * to write phone instead of name(like me). So if we found that input doesn't contain
+     * letters at all, we should tell user correct name.
+     * Supplier phone number - can be empty and inputType guarantee to us phone number
+     * so don't check
      *
      * @return result of validation
      */
@@ -176,5 +212,55 @@ public class EditActivity extends AppCompatActivity {
             supplierTextLayout.setError("");
         }
         return dataCorrect;
+    }
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDataHasChanged = true;
+            return false;
+        }
+    };
+
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // If the pet hasn't changed, continue with handling back button press
+        if (!mDataHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, close the current activity.
+                        finish();
+                    }
+                };
+        // Show dialog that there are unsaved changes
+        showUnsavedChangesDialog(discardButtonClickListener);
     }
 }

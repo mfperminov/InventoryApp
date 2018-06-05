@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:background="@color/surface"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_edit_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:layout_margin="@dimen/edit_text_margin">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edit_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            style="@style/item_text"
+            android:hint="@string/product_name_label" />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/edit_text_margin"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_edit_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/quantity_text_edit"
+                android:inputType="numberDecimal"
+                android:drawableLeft="@drawable/ic_attach_money"
+                android:hint="@string/price_label" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_edit_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/quantity_text_edit"
+                android:inputType="number"
+                android:hint="@string/quantity_label" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_edit_supplier_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edit_supplier_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            style="@style/supplier_text_edit"
+            android:hint="@string/supplier_name_label" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/edit_text_margin"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edit_supplier_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            style="@style/supplier_text_edit"
+            android:hint="@string/phone_number_label" />
+    </android.support.design.widget.TextInputLayout>
+
+
+</LinearLayout>

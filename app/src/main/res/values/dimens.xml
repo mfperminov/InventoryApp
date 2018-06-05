@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_size">40dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="in_text_margin">8dp</dimen>
+    <dimen name="plus_minus_button_size">48dp</dimen>
+    <dimen name="text_drawable_margin">8dp</dimen>
+    <dimen name="edit_text_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="list_item_small_margin">8dp</dimen>
+    <dimen name="image_small_list_item">40dp</dimen>
+</resources>

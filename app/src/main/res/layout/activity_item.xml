@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:orientation="vertical"
+    android:padding="?listPreferredItemPaddingLeft"
+    tools:context=".ItemActivity">
+
+    <ImageView
+        android:layout_width="@dimen/default_padding"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:scaleType="centerInside" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/default_padding">
+
+            <TextView
+                android:id="@+id/product_name_tv"
+                style="@style/item_text_big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/in_text_margin"
+                tools:text="Pen" />
+
+            <TextView
+                android:id="@+id/price_tv"
+                style="@style/price_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/product_name_tv"
+                tools:text="$16" />
+
+            <ImageButton
+                android:id="@+id/button_minus"
+                android:layout_width="@dimen/plus_minus_button_size"
+                android:layout_height="@dimen/plus_minus_button_size"
+                android:layout_alignBottom="@id/price_tv"
+                android:layout_toLeftOf="@id/quantity_tv"
+                android:layout_toStartOf="@id/quantity_tv"
+                android:contentDescription="@string/content_button_minus"
+                android:src="@drawable/ic_remove" />
+
+            <TextView
+                android:id="@+id/quantity_tv"
+                style="@style/price_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/price_tv"
+                android:layout_marginBottom="@dimen/in_text_margin"
+                android:layout_toLeftOf="@id/button_plus"
+                android:layout_toStartOf="@id/button_plus"
+                tools:text="23" />
+
+            <ImageButton
+                android:id="@+id/button_plus"
+                android:layout_width="@dimen/plus_minus_button_size"
+                android:layout_height="@dimen/plus_minus_button_size"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/price_tv"
+                android:contentDescription="@string/content_button_plus"
+                android:src="@drawable/ic_add" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/default_padding"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/in_text_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/supplier_text_captions"
+                    android:text="@string/supplier_name_label_item_info" />
+
+                <TextView
+                    android:id="@+id/supplier_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/supplier_text"
+                    tools:text="Mikhail Perminov" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/supplier_text_captions"
+                    android:text="@string/phone_number_label_item_info" />
+
+                <TextView
+                    android:id="@+id/supplier_phone_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/supplier_text"
+                    tools:text="+79817687870" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            style="?android:buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/button_order"
+                android:textAlignment="viewStart"
+                android:drawablePadding="@dimen/text_drawable_margin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_action_phone_start"
+                android:text="@string/call_button_caption"
+                android:drawableStart="@drawable/ic_action_phone_start"
+                android:layout_gravity="start" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/button_delete"
+                android:textAlignment="viewStart"
+                android:drawablePadding="@dimen/text_drawable_margin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_action_trash"
+                android:text="@string/delete_button_caption"
+                android:drawableStart="@drawable/ic_action_trash"
+                android:layout_gravity="start" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

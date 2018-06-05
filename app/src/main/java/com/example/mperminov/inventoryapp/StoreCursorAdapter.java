@@ -1,10 +1,13 @@
 package com.example.mperminov.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -63,7 +66,15 @@ public class StoreCursorAdapter extends CursorAdapter {
         int price = cursor.getInt(cursor.getColumnIndexOrThrow(StoreEntry.COLUMN_PRICE));
         //Bind data to views.
         nameTextView.setText(name);
-        quantityTextView.setText(String.valueOf(quantity));
-        priceTextView.setText(String.valueOf(price));
+        String formattedQuantityString = context.getString(R.string.quantity_available, quantity);
+        quantityTextView.setText(formattedQuantityString);
+        String formattedPriceString = context.getString(R.string.price_with_dollar, price);
+        priceTextView.setText(formattedPriceString);
+        Button sellButton = view.findViewById(R.id.sell_button);
+        // Get current row id;
+        long currentId = cursor.getLong(cursor.getColumnIndex(StoreEntry._ID));
+        Uri currentUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, currentId);
+        // Uri newUri = StoreEntry.CONTENT_URI.with id appended
+        sellButton.setOnClickListener(new QuantityButtonListener(currentUri, -1, R.id.quantity_text_view, true));
     }
 }

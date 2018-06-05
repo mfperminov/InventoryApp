@@ -3,14 +3,17 @@ package com.example.mperminov.inventoryapp;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -59,6 +62,7 @@ public class EditActivity extends AppCompatActivity {
         } else {
             setTitle(getString(R.string.edit_label_case_add));
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         productEditText.setOnTouchListener(mTouchListener);
         priceEditText.setOnTouchListener(mTouchListener);
         quantityEditText.setOnTouchListener(mTouchListener);
@@ -97,55 +101,76 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_save) {
-            if (validateData()) {
-                ContentValues values = collectData();
-                if (mUri != null) {
-                    int rowsUpdated = getContentResolver().update(mUri, values, null,
-                            null);
-                    if (rowsUpdated > 0) {
-                        Toast.makeText(this, R.string.update_success, Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, R.string.update_failure, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Uri newRow =
-                            getContentResolver().insert(StoreContract.StoreEntry.CONTENT_URI, values);
-                    if (newRow != null) {
-                        Toast.makeText(this, R.string.insert_success, Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, R.string.insert_failure, Toast.LENGTH_SHORT).show();
-                    }
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                if (!mDataHasChanged && validateData()) {
+                    Toast.makeText(this, R.string.save_nothing_changes_toast,
+                            Toast.LENGTH_SHORT).show();
                     finish();
                 }
-            } else
-                Toast.makeText(this, R.string.user_correct_toast, Toast.LENGTH_SHORT).show();
-        }
-        if (item.getItemId() == R.id.homeAsUp) {
-            // If the pet hasn't changed, continue with navigating up to parent activity
-            // which is the {@link CatalogActivity}.
-            if (!mDataHasChanged) {
-                NavUtils.navigateUpFromSameTask(EditActivity.this);
-                return true;
-            }
-            // Otherwise if there are unsaved changes, setup a dialog to warn the user.
-            // Create a click listener to handle the user confirming that
-            // changes should be discarded.
-            DialogInterface.OnClickListener discardButtonClickListener =
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // User clicked "Discard" button, navigate to parent activity.
-                            NavUtils.navigateUpFromSameTask(EditActivity.this);
+                if (validateData()) {
+                    ContentValues values = collectData();
+                    if (mUri != null) {
+                        int rowsUpdated = getContentResolver().update(mUri, values, null,
+                                null);
+                        if (rowsUpdated > 0) {
+                            Toast.makeText(this, R.string.update_success, Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, R.string.update_failure, Toast.LENGTH_SHORT).show();
                         }
-                    };
-            // Show a dialog that notifies the user they have unsaved changes
-            showUnsavedChangesDialog(discardButtonClickListener);
-            return true;
+                    } else {
+                        Uri newRow =
+                                getContentResolver().insert(StoreContract.StoreEntry.CONTENT_URI, values);
+                        if (newRow != null) {
+                            Toast.makeText(this, R.string.insert_success, Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, R.string.insert_failure, Toast.LENGTH_SHORT).show();
+                        }
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.user_correct_toast, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case android.R.id.home:
+                Log.e("button click", "id home clcked");
+                // If the pet hasn't changed, continue with navigating up to parent activity
+                // which is the {@link CatalogActivity}.
+                if (!mDataHasChanged) {
+                    upButtonNavigate();
+                    //NavUtils.navigateUpFromSameTask(this);
+                    return true;
+                }
+                // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+                // Create a click listener to handle the user confirming that
+                // changes should be discarded.
+                DialogInterface.OnClickListener discardUpButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // User clicked "Discard" button, navigate to parent activity.
+                                //NavUtils.navigateUpFromSameTask(EditActivity.this);
+                                upButtonNavigate();
+                            }
+                        };
+                // Show a dialog that notifies the user they have unsaved changes
+                showUnsavedChangesDialog(discardUpButtonClickListener);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void upButtonNavigate() {
+        if (mUri != null) {
+            Intent intent = new Intent(this, ItemActivity.class);
+            intent.setData(mUri);
+            ActivityCompat.startActivity(this, intent, null);
+        } else {
+            NavUtils.navigateUpFromSameTask(this);
+        }
     }
 
     /**
@@ -172,9 +197,9 @@ public class EditActivity extends AppCompatActivity {
      * *Price - not empty. Also it should be > 0 but we can guarantee it with typeInput specified
      * in xml layout
      * *Quantity - same as for price. Positive and integer value guaranteed by xml layout parameter
-     * *Supplier name - can be epmty BUT I think often happens that some people start
+     * *Supplier name - can be empty BUT I think often happens that some people start
      * to write phone instead of name(like me). So if we found that input doesn't contain
-     * letters at all, we should tell user correct name.
+     * letters at all, we should tell user to correct name.
      * Supplier phone number - can be empty and inputType guarantee to us phone number
      * so don't check
      *

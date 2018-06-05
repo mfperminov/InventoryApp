@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +57,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
             getLoaderManager().initLoader(0, null, this);
             setButtonsClickListeners();
         } else {
+            Log.v("redirect", "to Main");
             finish();
         }
     }
@@ -96,7 +98,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         });
-        // Delete button when clicked start coonfirmation dialog and on confirm
+        // Delete button when clicked start confirmation dialog and on confirm
         // delete entry.
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

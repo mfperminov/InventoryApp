@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
         ListView itemsListView = findViewById(R.id.list_view);
+        itemsListView.setEmptyView(findViewById(R.id.empty_view));
         storeAdapter = new StoreCursorAdapter(this, null);
         itemsListView.setAdapter(storeAdapter);
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

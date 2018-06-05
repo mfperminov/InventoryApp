@@ -30,7 +30,14 @@
             android:authorities="com.example.mperminov.inventoryapp"
             android:exported="false" />
 
-        <activity android:name=".EditActivity"></activity>
+        <activity
+            android:name=".EditActivity"
+            android:parentActivityName=".ItemActivity">
+            <!-- Parent activity meta-com.example.android.pets.data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ItemActivity" />
+        </activity>
     </application>
 
 </manifest>

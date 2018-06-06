@@ -76,7 +76,8 @@
         android:singleLine="true"
         android:layout_alignStart="@id/sell_button"
         android:layout_alignBottom="@id/lines_container"
-        tools:text="16$" />
+        tools:text="16$"
+        android:layout_alignLeft="@id/sell_button" />
 
 
 </RelativeLayout>

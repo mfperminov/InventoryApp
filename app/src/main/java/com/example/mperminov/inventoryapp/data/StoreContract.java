@@ -1,5 +1,6 @@
 package com.example.mperminov.inventoryapp.data;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -18,6 +19,7 @@ public class StoreContract {
      * Possible path (appended to base content URI for possible URI's)
      */
     public static final String PATH_PRODUCTS = "products";
+
     public static abstract class StoreEntry implements BaseColumns {
         //empty constructor - don't need to instance;
         private StoreEntry() {
@@ -36,5 +38,16 @@ public class StoreContract {
         public static final String COLUMN_IMAGE = "image_uri";
         //one more column for "upgrade"
         public static final String COLUMN_SIZES = "sizes";
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a list of products.
+         */
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single product.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
     }
 }

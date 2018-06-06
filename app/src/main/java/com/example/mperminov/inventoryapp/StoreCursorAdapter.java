@@ -92,10 +92,23 @@ public class StoreCursorAdapter extends CursorAdapter {
         String imageUriString = cursor.getString(cursor.getColumnIndex(StoreEntry.COLUMN_IMAGE));
         if (!TextUtils.isEmpty(imageUriString)) {
             smallImageViewInList.setImageBitmap(getBitmapFromUri(Uri.parse(imageUriString), context));
+        } else // make view transparent or views will be mixing up with images while scrolling
+        {
+            smallImageViewInList.setImageResource(android.R.color.transparent);
         }
 
     }
 
+    /**
+     * Memory saving method for showing an image
+     * It expands the JPEG into a memory array that’s
+     * already scaled to match the size of the destination view.
+     * Taken from
+     * https://github.com/crlsndrsjmnz/MyShareImageExample
+     *
+     * @param imageUri - URI of an image saved on phone.
+     * @return Bitmap of an image
+     */
     private Bitmap getBitmapFromUri(Uri imageUri, Context context) {
         // Get the dimensions of the View
         int targetW = (int) context.getResources().getDimension(R.dimen.image_small_list_item);

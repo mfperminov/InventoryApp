@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <!--Hereinafter source of font Lekton https://fonts.google.com/specimen/Lekton-->
     <style name="item_text" parent="@style/TextAppearance.AppCompat.Body2">
         <item name="android:textColor">#356859</item>
         <item name="android:fontFamily">@font/lekton_bold</item>

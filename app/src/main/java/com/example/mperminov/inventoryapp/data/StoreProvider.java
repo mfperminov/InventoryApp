@@ -12,6 +12,11 @@ import android.support.annotation.Nullable;
 
 import com.example.mperminov.inventoryapp.data.StoreContract.StoreEntry;
 
+/**
+ * Custom COntent provider. Most part of code is adapted version from
+ * Udacity Pets app.
+ * https://github.com/udacity/ud845-Pets/
+ */
 public class StoreProvider extends ContentProvider {
     //Database helper object
     private StoreDbHelper mDbHelper;
@@ -96,8 +101,19 @@ public class StoreProvider extends ContentProvider {
 
     @Nullable
     @Override
+    /*
+     * Handle requests for the MIME type of the data at the given URI
+     */
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case PRODUCTS:
+                return StoreEntry.CONTENT_LIST_TYPE;
+            case PRODUCT_ID:
+                return StoreEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     @Nullable
@@ -176,7 +192,7 @@ public class StoreProvider extends ContentProvider {
             case PRODUCTS:
                 return updateProduct(uri, values, selection, selectionArgs);
             case PRODUCT_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+                // For the PRODUCT_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = StoreEntry._ID + "=?";

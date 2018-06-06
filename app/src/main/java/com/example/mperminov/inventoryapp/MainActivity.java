@@ -29,8 +29,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    // Use Floating button in right corner for adding new items
     @BindView(R.id.fab)
     FloatingActionButton addButton;
+    // Custom CursorAdapter
     StoreCursorAdapter storeAdapter;
 
     @Override
@@ -38,22 +40,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //kick off loader
         getLoaderManager().initLoader(0, null, this);
+        //finding list view and set empty view on it
         ListView itemsListView = findViewById(R.id.list_view);
         itemsListView.setEmptyView(findViewById(R.id.empty_view));
+        //set out custom adapter on list view
         storeAdapter = new StoreCursorAdapter(this, null);
         itemsListView.setAdapter(storeAdapter);
+        // From the rubric - "When a user clicks on a List Item from the Main Activity,
+        // it opens up the detail screen for the correct product."
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
+            @Override 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(parent.getContext(), ItemActivity.class);
+                // Nice parent-child transit animations as described in Material Design.
+                // New activity fills screen starting from item position.
                 Bundle options = ActivityOptionsCompat.makeScaleUpAnimation(
                         view, 0, 0, view.getWidth(), view.getHeight()).toBundle();
+                // Send Uri of tapped item to ItemActivity.
                 Uri currentPetUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, id);
                 intent.setData(currentPetUri);
                 ActivityCompat.startActivity(parent.getContext(), intent, options);
             }
         });
+        // From the rubric - "The Main Activity contains an Add Product Button.."
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
-            // Respond to a click on the "Insert dummy data" menu option
+            // Respond to a click on the "Insert random product" menu option
             case R.id.action_insert_dummy_data:
                 insertProduct();
                 return true;
@@ -87,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method starts dialog asking user about deleting all entries. And if confirmed do it.
+     */
     private void deleteAll() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Ask question to user.
@@ -95,10 +109,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         builder.setPositiveButton(R.string.delete_entry_accept,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User clicked delete button. Delete current entry.
+                        // User clicked delete button. Delete all!
                         int rowsDeleted = getContentResolver().delete(StoreEntry.CONTENT_URI, null,
                                 null);
                         if (rowsDeleted > 0) {
+                            // everything fine
                             Toast.makeText(getBaseContext(), R.string.delete_successful,
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -125,18 +140,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String productName = faker.commerce().productName();
         String supplierName = faker.name().fullName();
         String phoneNumber = faker.phoneNumber().phoneNumber();
-        //Generate random int number within [0 1000] interval
+        // Generate random int number within [0 1000] interval
         int price = (int) (Math.random() * ((1000) + 1));
-        //Generate random int number within [0 100] interval
+        // Generate random int number within [0 100] interval
         int quantity = (int) (Math.random() * ((100) + 1));
-        //save values
+        //Save values
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_PRODUCT_NAME, productName);
         values.put(StoreEntry.COLUMN_PRICE, price);
         values.put(StoreEntry.COLUMN_QUANTITY, quantity);
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, phoneNumber);
-        //try to insert and look if uri is null. If yes something went wrong.
+        // Try to insert and look if uri is null. If yes something went wrong.
         Uri newRow = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
         if (newRow == null) {
             Toast.makeText(this, R.string.toast_problem_insert_fake, Toast.LENGTH_SHORT).show();
@@ -145,13 +160,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    // Load data from database into separate thread by using loaders.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Don't request for supplier info - we don't show it in MainActivity.
         String[] projection = {
                 StoreEntry._ID,
                 StoreEntry.COLUMN_PRODUCT_NAME,
                 StoreEntry.COLUMN_QUANTITY,
-                StoreEntry.COLUMN_PRICE
+                StoreEntry.COLUMN_PRICE,
+                StoreEntry.COLUMN_IMAGE
         };
         return new CursorLoader(this, StoreEntry.CONTENT_URI, projection, null,
                 null, null);
@@ -159,11 +177,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // When end loading feed data to custom adapter
         storeAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        // Previous loader is being reset, so data unavailable and swap it with null for now.
         storeAdapter.swapCursor(null);
     }
 

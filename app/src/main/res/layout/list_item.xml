@@ -12,7 +12,7 @@
     android:paddingStart="?listPreferredItemPaddingLeft">
 
     <ImageView
-        android:id="@+id/primary_action"
+        android:id="@+id/image_in_list_view"
         android:layout_width="@dimen/image_small_list_item"
         android:layout_height="@dimen/image_small_list_item"
         android:layout_marginTop="@dimen/default_padding"
@@ -26,9 +26,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/list_item_small_margin"
         android:layout_marginRight="@dimen/list_item_small_margin"
-        android:layout_toEndOf="@+id/primary_action"
+        android:layout_toEndOf="@+id/image_in_list_view"
         android:layout_toLeftOf="@+id/sell_button"
-        android:layout_toRightOf="@+id/primary_action"
+        android:layout_toRightOf="@+id/image_in_list_view"
         android:layout_toStartOf="@+id/sell_button"
         android:orientation="vertical"
         android:paddingBottom="@dimen/default_padding"

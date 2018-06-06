@@ -33,7 +33,7 @@ public class QuantityButtonListener implements View.OnClickListener {
         if (mCursor != null && mCursor.moveToFirst()) {
             quantity = mCursor.getInt(mCursor.getColumnIndex(StoreEntry.COLUMN_QUANTITY));
             mCursor.close();
-            if (quantity <= 0) {
+            if (quantity <= 0 && mAction == -1) {
                 Toast.makeText(v.getContext(), R.string.quantity_less_zero_error_toast,
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -44,9 +44,6 @@ public class QuantityButtonListener implements View.OnClickListener {
                     String selection = StoreEntry._ID + "=?";
                     String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mUri))};
                     v.getContext().getContentResolver().update(mUri, values, selection, selectionArgs);
-                    //String formattedQuantityString = v.getContext().getString(R.string.quantity_available,
-                    //quantity+mAction);
-                    //quantityTextView.setText(formattedQuantityString);
                 } else {
                     String selection = StoreEntry._ID + "=?";
                     String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mUri))};

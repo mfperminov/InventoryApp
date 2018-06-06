@@ -3,15 +3,24 @@ package com.example.mperminov.inventoryapp;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mperminov.inventoryapp.data.StoreContract.StoreEntry;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * {@link StoreCursorAdapter} is an adapter for a list or grid view
@@ -19,6 +28,7 @@ import com.example.mperminov.inventoryapp.data.StoreContract.StoreEntry;
  * how to create list items for each row of product data in the {@link Cursor}.
  */
 public class StoreCursorAdapter extends CursorAdapter {
+    private static final String LOG_TAG = StoreCursorAdapter.class.getSimpleName();
     /**
      * Constructs a new {@link StoreCursorAdapter}.
      *
@@ -75,6 +85,54 @@ public class StoreCursorAdapter extends CursorAdapter {
         long currentId = cursor.getLong(cursor.getColumnIndex(StoreEntry._ID));
         Uri currentUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, currentId);
         // Uri newUri = StoreEntry.CONTENT_URI.with id appended
-        sellButton.setOnClickListener(new QuantityButtonListener(currentUri, -1, R.id.quantity_text_view, true));
+        sellButton.setOnClickListener(new QuantityButtonListener(currentUri, -1,
+                R.id.quantity_text_view, true));
+        ImageView smallImageViewInList = view.findViewById(R.id.image_in_list_view);
+        // if an uri for image exists - show image in List View.
+        String imageUriString = cursor.getString(cursor.getColumnIndex(StoreEntry.COLUMN_IMAGE));
+        if (!TextUtils.isEmpty(imageUriString)) {
+            smallImageViewInList.setImageBitmap(getBitmapFromUri(Uri.parse(imageUriString), context));
+        }
+
+    }
+
+    private Bitmap getBitmapFromUri(Uri imageUri, Context context) {
+        // Get the dimensions of the View
+        int targetW = (int) context.getResources().getDimension(R.dimen.image_small_list_item);
+        int targetH = (int) context.getResources().getDimension(R.dimen.image_small_list_item);
+        InputStream input = null;
+        try {
+            input = context.getContentResolver().openInputStream(imageUri);
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, bmOptions);
+            input.close();
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+            input = context.getContentResolver().openInputStream(imageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(input, null, bmOptions);
+            input.close();
+            return bitmap;
+
+        } catch (FileNotFoundException fne) {
+            Log.e(LOG_TAG, context.getResources().getString(R.string.failed_image_loading), fne);
+            return null;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, context.getResources().getString(R.string.failed_image_loading), e);
+            return null;
+        } finally {
+            try {
+                input.close();
+            } catch (IOException ioe) {
+                Log.e(LOG_TAG, context.getResources().getString(R.string.input_stream_error), ioe);
+            }
+        }
     }
 }

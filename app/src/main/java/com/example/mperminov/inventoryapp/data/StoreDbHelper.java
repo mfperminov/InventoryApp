@@ -19,7 +19,8 @@ public class StoreDbHelper extends SQLiteOpenHelper {
                     StoreEntry.COLUMN_PRICE + " INTEGER NOT NULL," +
                     StoreEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
                     StoreEntry.COLUMN_SUPPLIER_NAME + " TEXT," +
-                    StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT)";
+                    StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT," +
+                    StoreEntry.COLUMN_IMAGE + " TEXT)";
 
     private static final String SQL_ALTER_DATABASE = "ALTER TABLE " + StoreEntry.TABLE_NAME
             + " ADD COLUMN " + StoreEntry.COLUMN_SIZES + " TEXT";

@@ -1,11 +1,13 @@
 package com.example.mperminov.inventoryapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mperminov.inventoryapp.data.StoreContract;
@@ -28,8 +32,15 @@ import butterknife.ButterKnife;
 
 
 public class EditActivity extends AppCompatActivity {
+
     private Uri mUri;
+    // Uri for optional image
+    private Uri mImageUri;
     private boolean mDataHasChanged = false;
+    private static final int PICK_IMAGE_REQUEST = 0;
+    private static final String LOG_TAG = EditActivity.class.getSimpleName();
+    // TextInputEditText is a child of TextInputLayout
+    // First - for grabbing data, second - to show an error in input if exist
     @BindView(R.id.edit_product)
     TextInputEditText productEditText;
     @BindView(R.id.edit_price)
@@ -48,6 +59,11 @@ public class EditActivity extends AppCompatActivity {
     TextInputLayout quantityTextLayout;
     @BindView(R.id.layout_edit_supplier_name)
     TextInputLayout supplierTextLayout;
+    // Button for image picking
+    @BindView(R.id.image_chooser_button)
+    Button imageChooseButton;
+    @BindView(R.id.image_uri_text_view)
+    TextView imageUriText;
 
 
     @Override
@@ -68,7 +84,13 @@ public class EditActivity extends AppCompatActivity {
         quantityEditText.setOnTouchListener(mTouchListener);
         supplierNameEditText.setOnTouchListener(mTouchListener);
         supplierPhoneEditText.setOnTouchListener(mTouchListener);
-
+        imageChooseButton.setOnTouchListener(mTouchListener);
+        imageChooseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImageSelector();
+            }
+        });
     }
 
     private void inflateData(Uri mUri) {
@@ -188,6 +210,10 @@ public class EditActivity extends AppCompatActivity {
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, supplierNameEditText.getText().toString());
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
                 supplierPhoneEditText.getText().toString());
+        // If user choose an image add its address to values
+        if (mImageUri != null) {
+            values.put(StoreEntry.COLUMN_IMAGE, mImageUri.toString());
+        }
         return values;
     }
 
@@ -287,5 +313,31 @@ public class EditActivity extends AppCompatActivity {
                 };
         // Show dialog that there are unsaved changes
         showUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    private void openImageSelector() {
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        }
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
+            if (data != null) {
+                mImageUri = data.getData();
+                Log.i(LOG_TAG, "Uri: " + mImageUri.toString());
+                imageUriText.setText(mImageUri.toString());
+            }
+        }
     }
 }

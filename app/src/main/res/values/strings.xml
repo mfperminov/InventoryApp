@@ -50,4 +50,7 @@
     <string name="save_nothing_changes_toast">Nothing changes</string>
     <string name="empty_view_title_text">We are out of stock!</string>
     <string name="empty_view_subtitle_text">Try to add new product or randomize some from toolbar menu!</string>
+    <string name="button_image_choose_label">Choose an image</string>
+    <string name="failed_image_loading">Failed to load image.</string>
+    <string name="input_stream_error">Failed to close input stream.</string>
 </resources>

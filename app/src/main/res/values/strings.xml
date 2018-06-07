@@ -53,4 +53,6 @@
     <string name="button_image_choose_label">Choose an image</string>
     <string name="failed_image_loading">Failed to load image.</string>
     <string name="input_stream_error">Failed to close input stream.</string>
+    <string name="enter_supplier_error">Please enter supplier name</string>
+    <string name="enter_supplier_phone_error">Please enter phone</string>
 </resources>

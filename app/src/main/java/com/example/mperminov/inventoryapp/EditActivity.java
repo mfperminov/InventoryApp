@@ -59,6 +59,8 @@ public class EditActivity extends AppCompatActivity {
     TextInputLayout quantityTextLayout;
     @BindView(R.id.layout_edit_supplier_name)
     TextInputLayout supplierTextLayout;
+    @BindView(R.id.layout_edit_supplier_phone)
+    TextInputLayout supplierPhoneLayout;
     // Button for image picking
     @BindView(R.id.image_chooser_button)
     Button imageChooseButton;
@@ -254,13 +256,23 @@ public class EditActivity extends AppCompatActivity {
         } else {
             quantityTextLayout.setError("");
         }
-        //Supplier name - at least one letter in name
-        if (supplierNameEditText.getText().toString().matches("[0-9]+") &&
+        // Supplier name - not empty and aat least one letter. Correct after first review.
+        if (TextUtils.isEmpty(supplierNameEditText.getText().toString())) {
+            supplierTextLayout.setError(getString(R.string.enter_supplier_error));
+            dataCorrect = false;
+        } else if (supplierNameEditText.getText().toString().matches("[0-9]+") &&
                 !TextUtils.isEmpty(supplierNameEditText.getText().toString())) {
             supplierTextLayout.setError(getString(R.string.name_error_edit_text));
             dataCorrect = false;
         } else {
-            supplierTextLayout.setError("");
+            quantityTextLayout.setError("");
+        }
+        // Supplier phone - not empty. Correct after first review.
+        if (TextUtils.isEmpty(supplierPhoneEditText.getText().toString())) {
+            supplierPhoneLayout.setError(getString(R.string.enter_supplier_phone_error));
+            dataCorrect = false;
+        } else {
+            quantityTextLayout.setError("");
         }
         return dataCorrect;
     }

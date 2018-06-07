@@ -94,7 +94,7 @@ public class StoreCursorAdapter extends CursorAdapter {
             smallImageViewInList.setImageBitmap(getBitmapFromUri(Uri.parse(imageUriString), context));
         } else // make view transparent or views will be mixing up with images while scrolling
         {
-            smallImageViewInList.setImageResource(android.R.color.transparent);
+            smallImageViewInList.setImageResource(0);
         }
 
     }

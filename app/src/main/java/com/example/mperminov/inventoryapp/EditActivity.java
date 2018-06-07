@@ -265,7 +265,7 @@ public class EditActivity extends AppCompatActivity {
             supplierTextLayout.setError(getString(R.string.name_error_edit_text));
             dataCorrect = false;
         } else {
-            quantityTextLayout.setError("");
+            supplierTextLayout.setError("");
         }
         // Supplier phone - not empty. Correct after first review.
         if (TextUtils.isEmpty(supplierPhoneEditText.getText().toString())) {
